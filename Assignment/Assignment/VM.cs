@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Assignment
 {
@@ -16,10 +17,12 @@ namespace Assignment
         public VM()
         {
             LoadCoinsList();
+            LoadTrend();
         }
 
 
         public ObservableCollection<CoinsItem> CoinsList { get; set; } = new ObservableCollection<CoinsItem>();
+        public ObservableCollection<TrendsItem> TrendsList { get; set; } = new ObservableCollection<TrendsItem>();
         public async void LoadCoinsList()
         {
             var client = new HttpClient();
@@ -44,6 +47,31 @@ namespace Assignment
                 CoinsList.Add(i);
             }
 
+        }
+
+        public async void LoadTrend()
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.coingecko.com/api/v3/search/trending");
+            var response = await client.SendAsync(request);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                //Error error = new Error();
+                //error.reason = "Request is failed!";
+                //error.Show();
+                return;
+            }
+
+            var m = JsonConvert.DeserializeObject< Trends>(await response.Content.ReadAsStringAsync());
+
+            foreach (var i in m.coins)
+            {
+                TrendsList.Add(i.item);
+            }
         }
 
 

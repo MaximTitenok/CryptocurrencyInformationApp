@@ -5,20 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Assignment"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="740">
+        Title="Main" Height="450" Width="680">
     <Grid>
         <DataGrid x:Name="CoinsGrid" ItemsSource="{Binding CoinsList}" Width="545" 
-                  Margin="185,50,10,10" AutoGenerateColumns="False" CanUserAddRows="False"
-                  CanUserDeleteRows="False" CanUserResizeRows="False"> 
+            Margin="125,50,10,10" AutoGenerateColumns="False" CanUserAddRows="False"
+            CanUserDeleteRows="False" CanUserResizeRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Width="100" Binding="{Binding Path=Name}"/>
-                <DataGridTextColumn Header="Symbol" Width="50" Binding="{Binding Path=symbol}" />
-                <DataGridTextColumn Header="Price" Width="100" Binding="{Binding Path=current_price}"/>
-                <DataGridTextColumn Header="24h" Width="70" Binding="{Binding Path=price_change_percentage_24h}"/>
-                <DataGridTextColumn Header="Capitalization" Width="100" Binding="{Binding Path=market_cap}"/>
-                <DataGridTextColumn Header="Total Volume" Width="100" Binding="{Binding Path=total_volume}"/>
-                
+                <DataGridTextColumn Header="Name" Width="100" Binding="{Binding name}"/>
+                <DataGridTextColumn Header="Symbol" Width="50" Binding="{Binding symbol}" />
+                <DataGridTextColumn Header="Price" Width="100" Binding="{Binding current_price}" />
+                <DataGridTextColumn Header="24h" Width="70" Binding="{Binding price_change_percentage_24h}"/>
+                <DataGridTextColumn Header="Capitalization" Width="100" Binding="{Binding market_cap}"/>
+                <DataGridTextColumn Header="Total Volume" Width="100" Binding="{Binding total_volume}"/>
+
             </DataGrid.Columns>
-            </DataGrid>
+        </DataGrid>
+        <DataGrid x:Name="TrendsGrid" ItemsSource="{Binding TrendsList}" Width="110" 
+            Margin="10,50,560,10" AutoGenerateColumns="False" CanUserAddRows="False"
+            CanUserDeleteRows="False" CanUserResizeRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="100" Binding="{Binding name}"/>
+
+
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
