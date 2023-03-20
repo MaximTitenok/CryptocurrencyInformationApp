@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Assignment"
         mc:Ignorable="d"
-        Title="Main" Height="450" Width="680">
+        Title="Main" Height="450" Width="680"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <DataGrid x:Name="CoinsGrid" ItemsSource="{Binding CoinsList}" Width="545" 
-            Margin="125,50,10,10" AutoGenerateColumns="False" CanUserAddRows="False"
+            Margin="125,50,10,10" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False"
             CanUserDeleteRows="False" CanUserResizeRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="100" Binding="{Binding name}"/>
@@ -20,7 +21,7 @@
 
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="TrendsGrid" ItemsSource="{Binding TrendsList}" Width="110" 
+        <DataGrid x:Name="TrendsGrid" ItemsSource="{Binding TrendsList}" IsReadOnly="True" Width="110" 
             Margin="10,50,560,10" AutoGenerateColumns="False" CanUserAddRows="False"
             CanUserDeleteRows="False" CanUserResizeRows="False">
             <DataGrid.Columns>
@@ -29,5 +30,9 @@
 
             </DataGrid.Columns>
         </DataGrid>
+        <Button Content="Convert" HorizontalAlignment="Left" Height="35" 
+                Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Command="{Binding ButtonConvert}"/>
+        <Button Content="Search" HorizontalAlignment="Left" Height="35" 
+            Margin="125,10,0,0" VerticalAlignment="Top" Width="150" Command="{Binding ButtonSearchPage}"/>
     </Grid>
 </Window>

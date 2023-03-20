@@ -35,3 +35,7 @@ C:\Users\maxim\source\repos\Assignment\Assignment\bin\Debug\System.Text.Json.xml
 C:\Users\maxim\source\repos\Assignment\Assignment\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\maxim\source\repos\Assignment\Assignment\bin\Debug\System.ValueTuple.xml
 C:\Users\maxim\source\repos\Assignment\Assignment\obj\Debug\Assignment.csproj.CopyComplete
+C:\Users\maxim\source\repos\Assignment\Assignment\obj\Debug\ConvertingPage.g.cs
+C:\Users\maxim\source\repos\Assignment\Assignment\obj\Debug\ConvertingPage.baml
+C:\Users\maxim\source\repos\Assignment\Assignment\obj\Debug\SearchPage.g.cs
+C:\Users\maxim\source\repos\Assignment\Assignment\obj\Debug\SearchPage.baml
