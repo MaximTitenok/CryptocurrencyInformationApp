@@ -16,10 +16,11 @@ namespace Assignment
 {
     public partial class ConvertingPage : Window
     {
-        public ConvertingPage()
+
+        public ConvertingPage(string color)
         {
             InitializeComponent();
-            DataContext = new VM();
+            DataContext = new VM(color);
         }
     }
 }

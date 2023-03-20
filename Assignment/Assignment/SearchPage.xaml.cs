@@ -19,10 +19,10 @@ namespace Assignment
     /// </summary>
     public partial class SearchPage : Window
     {
-        public SearchPage()
+        public SearchPage(string color)
         {
             InitializeComponent();
-            DataContext = new VM();
+            DataContext = new VM(color);
         }
     }
 }

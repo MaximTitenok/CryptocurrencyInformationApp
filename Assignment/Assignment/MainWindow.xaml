@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Assignment"
+        xmlns:local="clr-namespace:Assignment" 
         mc:Ignorable="d"
         Title="Main" Height="450" Width="680"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        >
+    <Window.Background>
+        <SolidColorBrush Color="{Binding YourColorProperty}"/>
+    </Window.Background>
     <Grid>
         <DataGrid x:Name="CoinsGrid" ItemsSource="{Binding CoinsList}" Width="545" 
             Margin="125,50,10,10" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False"
@@ -34,5 +38,7 @@
                 Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Command="{Binding ButtonConvert}"/>
         <Button Content="Search" HorizontalAlignment="Left" Height="35" 
             Margin="125,10,0,0" VerticalAlignment="Top" Width="150" Command="{Binding ButtonSearchPage}"/>
+        <Button Content="Theme" HorizontalAlignment="Left" Height="35" 
+            Margin="593,10,0,0" VerticalAlignment="Top" Width="62" Command="{Binding ButtonTheme}"/>
     </Grid>
 </Window>

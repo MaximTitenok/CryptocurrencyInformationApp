@@ -20,7 +20,7 @@ namespace Assignment
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new VM();
+            DataContext = new VM("#FFA0A0A0");
         }
     }
 }

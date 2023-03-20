@@ -15,14 +15,17 @@ namespace Assignment
 {
     public class VM : INotifyPropertyChanged
     {
-        public VM()
+        public VM(string backgroundColor)
         {
+            YourColorProperty = backgroundColor;
             LoadCoinsList();
             LoadTrend();
             ButtonConvert = new RelayCommand(new Action<object>(ShowConvertingPage));
             ButtonSearchPage = new RelayCommand(new Action<object>(ShowSearchPage));
             ButtonConverting = new RelayCommand(new Action<object>(GetConverting));
             ButtonSearch = new RelayCommand(new Action<object>(ToFindCoin));
+            ButtonTheme = new RelayCommand(new Action<object>(ChangeTheme));
+
         }
 
 
@@ -45,20 +48,24 @@ namespace Assignment
         public string ConvertingCurrency { get; set; }
         public string ConvertingResult { get; set; }
         public string SearchField { get; set; }
+        public string YourColorProperty { get; set; } = "#FFA0A0A0";
+
 
         public ICommand ButtonConvert { get; set; }
         public ICommand ButtonConverting { get; set; }
         public ICommand ButtonSearchPage { get; set; }
         public ICommand ButtonSearch { get; set; }
+        public ICommand ButtonTheme { get; set; }
+        
 
         public void ShowConvertingPage(object obj)
         {
-            ConvertingPage convertingPage = new ConvertingPage();
+            ConvertingPage convertingPage = new ConvertingPage(YourColorProperty);
             convertingPage.Show();
         }
         public void ShowSearchPage(object obj)
         {
-            SearchPage searchPage = new SearchPage();
+            SearchPage searchPage = new SearchPage(YourColorProperty);
             searchPage.Show();
         }
 
@@ -191,6 +198,20 @@ namespace Assignment
                 SearchList.Add(new SearchItem(i["name"].ToString() ?? "", i["symbol"].ToString() ?? "", i["market_cap_rank"].ToString() ?? ""));
             }
             OnPropertyChanged("SearchList");
+        }
+
+        public async void ChangeTheme(object obj)
+        {
+            if(YourColorProperty == "#FFA0A0A0")
+            {
+                YourColorProperty = "#FFFFFFFF";
+            }
+            else
+            {
+                YourColorProperty = "#FFA0A0A0";
+            }
+                
+            OnPropertyChanged("YourColorProperty");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
