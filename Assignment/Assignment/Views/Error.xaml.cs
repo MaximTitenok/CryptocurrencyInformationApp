@@ -15,14 +15,16 @@ using System.Windows.Shapes;
 namespace Assignment
 {
     /// <summary>
-    /// Логика взаимодействия для SearchPage.xaml
+    /// Логика взаимодействия для Error.xaml
     /// </summary>
-    public partial class SearchPage : Window
+    public partial class Error : Window
     {
-        public SearchPage(string color)
+        public Error(string color,string error)
         {
             InitializeComponent();
-            DataContext = new VM(color);
+            VM vm = new VM(color);
+            vm.ErrorReason = error;
+            DataContext = vm;
         }
     }
 }

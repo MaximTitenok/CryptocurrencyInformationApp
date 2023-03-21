@@ -10,30 +10,36 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Newtonsoft.Json.Linq;
+using System.Threading;
+using System.Windows;
 
 namespace Assignment
 {
     public class VM : INotifyPropertyChanged
     {
+        public static readonly DependencyProperty TitleProperty;
         public VM(string backgroundColor)
         {
             YourColorProperty = backgroundColor;
-            LoadCoinsList();
-            LoadTrend();
+            
             ButtonConvert = new RelayCommand(new Action<object>(ShowConvertingPage));
             ButtonSearchPage = new RelayCommand(new Action<object>(ShowSearchPage));
             ButtonConverting = new RelayCommand(new Action<object>(GetConverting));
             ButtonSearch = new RelayCommand(new Action<object>(ToFindCoin));
             ButtonTheme = new RelayCommand(new Action<object>(ChangeTheme));
-
+            ButtonViewInformation = new RelayCommand(new Action<object>(ShowInformationPage));
+            ButtonGoWebsite = new RelayCommand(new Action<object>(GoToWebsite));
+            
         }
 
 
         public ObservableCollection<CoinsItem> CoinsList { get; set; } = new ObservableCollection<CoinsItem>();
         public ObservableCollection<TrendsItem> TrendsList { get; set; } = new ObservableCollection<TrendsItem>();
         public ObservableCollection<SearchItem> SearchList { get; set; } = new ObservableCollection<SearchItem>();
-        public string[] vs_currencies { get; set; } = 
-        { 
+        public ObservableCollection<MarketsItem> MarketsList { get; set; } = new ObservableCollection<MarketsItem>();
+        public ObservableCollection<double> PriceList { get; set; } = new ObservableCollection<double>();
+        public string[] vs_currencies { get; set; } =
+        {
             "btc","eth","ltc","bch","bnb","eos","xrp","xlm",
             "link","dot","yfi","usd","aed","ars","aud","bdt","bhd",
             "bmd","brl","cad","chf","clp","cny","czk","dkk","eur",
@@ -43,20 +49,50 @@ namespace Assignment
             "vef","vnd","zar","xdr","xag","xau","bits","sats"
         };
 
+        int selectedField;
+
+        public string YourColorProperty { get; set; } = "#FFA0A0A0";
+
         public string ConvertingAmountCoins { get; set; }
         public string ConvertingCoinID { get; set; }
         public string ConvertingCurrency { get; set; }
         public string ConvertingResult { get; set; }
-        public string SearchField { get; set; }
-        public string YourColorProperty { get; set; } = "#FFA0A0A0";
 
+        public string SearchField { get; set; }
+
+        public string InfoCoinID { get; set; }
+        public string InfoName { get; set; }
+        public string InfoSymbol { get; set; }
+        public string InfoPrice { get; set; }
+        public string InfoVolume { get; set; }
+        public string InfoMarkCap { get; set; }
+        public string InfoDescription { get; set; }
+        public string InfoWebsite { get; set; }
+
+        public string ErrorReason { get; set; }
+
+        public int SelectedField
+        {
+            get { return selectedField; }
+            set
+            {
+                selectedField = value;
+            }
+        }
 
         public ICommand ButtonConvert { get; set; }
         public ICommand ButtonConverting { get; set; }
         public ICommand ButtonSearchPage { get; set; }
         public ICommand ButtonSearch { get; set; }
         public ICommand ButtonTheme { get; set; }
-        
+        public ICommand ButtonViewInformation { get; set; }
+        public ICommand ButtonGoWebsite { get; set; }
+
+        public void StartMain()
+        {
+            LoadCoinsList();
+            LoadTrend();
+        }
 
         public void ShowConvertingPage(object obj)
         {
@@ -65,33 +101,55 @@ namespace Assignment
         }
         public void ShowSearchPage(object obj)
         {
+            
             SearchPage searchPage = new SearchPage(YourColorProperty);
             searchPage.Show();
         }
-
-        public async void LoadCoinsList()
+        public void ShowInformationPage(object obj)
         {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
-            var response = await client.SendAsync(request);
-            try
+            if (CoinsList.Count != 0)
             {
-                response.EnsureSuccessStatusCode();
+                InformationPage informationPage = new InformationPage(YourColorProperty, CoinsList[SelectedField].id ?? "");
+                informationPage.Show();
+            }    
+        }
+        public void GoToWebsite(object obj)
+        {
+            if (InfoWebsite != null)
+            {
+                System.Diagnostics.Process.Start(InfoWebsite);
             }
-            catch (HttpRequestException)
+            else
             {
-                //Error error = new Error();
-                //error.reason = "Request is failed!";
-                //error.Show();
+                Error error = new Error(YourColorProperty, "Invalid link!");
+                error.Show();
                 return;
             }
+        }
+        
+        public async void LoadCoinsList()
+        {
+        var client = new HttpClient();
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false");
+        var response = await client.SendAsync(request);
+        try
+        {
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException)
+        {
+            Error error = new Error(YourColorProperty, "Request is failed!");
+            error.Show();
+            return;
+        }
 
-            var m = JsonConvert.DeserializeObject<List<CoinsItem>>(await response.Content.ReadAsStringAsync());
+        var m = JsonConvert.DeserializeObject<List<CoinsItem>>(await response.Content.ReadAsStringAsync());
 
-            foreach(var i in m)
-            {
-                CoinsList.Add(i);
-            }
+        foreach (var i in m)
+        {
+            CoinsList.Add(i);
+        }
+
 
         }
 
@@ -106,18 +164,19 @@ namespace Assignment
             }
             catch (HttpRequestException)
             {
-                //Error error = new Error();
-                //error.reason = "Request is failed!";
-                //error.Show();
+                Error error = new Error(YourColorProperty, "Request is failed!");
+                error.Show();
                 return;
             }
 
-            var m = JsonConvert.DeserializeObject< Trends>(await response.Content.ReadAsStringAsync());
+            var m = JsonConvert.DeserializeObject<Trends>(await response.Content.ReadAsStringAsync());
 
             foreach (var i in m.coins)
             {
                 TrendsList.Add(i.item);
             }
+
+
         }
 
         public async void GetConverting(object obj)
@@ -128,9 +187,8 @@ namespace Assignment
                 bool isCorrect = double.TryParse(ConvertingAmountCoins, out double amount_coins);
                 if (isCorrect == false)
                 {
-                    //Error error = new Error();
-                    //error.reason = "Incorrect data!";
-                    //error.Show();
+                    Error error = new Error(YourColorProperty, "Incorrect data!");
+                    error.Show();
                     return;
                 }
 
@@ -143,9 +201,8 @@ namespace Assignment
                 }
                 catch (HttpRequestException)
                 {
-                    //Error error = new Error();
-                    //error.reason = "Request is failed!";
-                    //error.Show();
+                    Error error = new Error(YourColorProperty, "Request is failed!");
+                    error.Show();
                     return;
                 }
                 string result = await response.Content.ReadAsStringAsync();
@@ -159,9 +216,9 @@ namespace Assignment
             }
             else
             {
-                //Error error = new Error();
-                //error.reason = "Fill all the fields!";
-                //error.Show();
+                Error error = new Error(YourColorProperty, "Fill all the fields!");
+                error.Show();
+                return;
             }
         }
 
@@ -169,9 +226,8 @@ namespace Assignment
         {
             if (SearchField == "")
             {
-                //Error error = new Error();
-                //error.reason = "Fill the field!";
-                //error.Show();
+                Error error = new Error(YourColorProperty, "Fill the field!");
+                error.Show();
                 return;
             }
             var client = new HttpClient();
@@ -183,26 +239,23 @@ namespace Assignment
             }
             catch (HttpRequestException)
             {
-                //Error error = new Error();
-                //error.reason = "Request is failed!";
-                //error.Show();
+                Error error = new Error(YourColorProperty, "Request is failed!");
+                error.Show();
                 return;
             }
-            //SearchList
             SearchList.Clear();
-            OnPropertyChanged("SearchList");
             JObject info = JObject.Parse(await response.Content.ReadAsStringAsync());
             foreach (var i in info["coins"])
             {
 
                 SearchList.Add(new SearchItem(i["name"].ToString() ?? "", i["symbol"].ToString() ?? "", i["market_cap_rank"].ToString() ?? ""));
             }
-            OnPropertyChanged("SearchList");
+
         }
 
-        public async void ChangeTheme(object obj)
+        public void ChangeTheme(object obj)
         {
-            if(YourColorProperty == "#FFA0A0A0")
+            if (YourColorProperty == "#FFA0A0A0")
             {
                 YourColorProperty = "#FFFFFFFF";
             }
@@ -210,8 +263,74 @@ namespace Assignment
             {
                 YourColorProperty = "#FFA0A0A0";
             }
-                
             OnPropertyChanged("YourColorProperty");
+        }
+
+        public async void LoadInfoPage(string id)
+        {
+            InfoCoinID = id;
+            if (InfoCoinID == null || InfoCoinID == "")
+            {
+                Error error = new Error(YourColorProperty, "Unknown coin!");
+                error.Show();
+                return;
+            }
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.coingecko.com/api/v3/coins/" + InfoCoinID);
+            var response = await client.SendAsync(request);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                Error error = new Error(YourColorProperty, "Request is failed!");
+                error.Show();
+                return;
+            }
+            JObject result = JObject.Parse(await response.Content.ReadAsStringAsync());
+            
+            InfoName = result["name"].ToString() ?? "";
+            OnPropertyChanged("InfoName");
+            InfoCoinID = result["id"].ToString() ?? "";
+            OnPropertyChanged("InfoCoinID");
+            InfoSymbol = result["symbol"].ToString() ?? "";
+            OnPropertyChanged("InfoSymbol");
+            InfoPrice = result["market_data"]["current_price"]["usd"].ToString() + " $" ?? "";
+            OnPropertyChanged("InfoPrice");
+            InfoVolume = result["market_data"]["total_volume"]["usd"].ToString() ?? "";
+            OnPropertyChanged("InfoVolume");
+            InfoMarkCap = result["market_data"]["market_cap"]["usd"].ToString() ?? "";
+            OnPropertyChanged("InfoMarkCap");
+            InfoDescription = result["description"]["en"].ToString() ?? result["description"]["en"].ToString();
+            OnPropertyChanged("InfoDescription");
+            InfoWebsite = result["links"]["homepage"][0].ToString();
+
+            foreach (var i in result["tickers"])
+            {
+                MarketsList.Add(new MarketsItem(i["market"]["name"].ToString(), i["target"].ToString(),Math.Round(Convert.ToDouble(i["converted_last"]["usd"]),2)));            
+            }
+
+
+            var requestPriceChange = new HttpRequestMessage(HttpMethod.Get, "https://api.coingecko.com/api/v3/coins/" + InfoCoinID + "/market_chart?vs_currency=usd&days=1");
+            var responsePriceChange = await client.SendAsync(requestPriceChange);
+            try
+            {
+                responsePriceChange.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException)
+            {
+                Error error = new Error(YourColorProperty, "Request is failed!");
+                error.Show();
+                return;
+            }
+            
+            JObject history = JObject.Parse(await responsePriceChange.Content.ReadAsStringAsync());
+            foreach (var i in history["prices"])
+            {
+                PriceList.Add(Math.Round(Convert.ToDouble(i[1]), 4, MidpointRounding.AwayFromZero));
+            }
+            OnPropertyChanged("PriceList");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

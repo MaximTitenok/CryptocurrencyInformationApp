@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\maxim\source\repos\Assignment\Assignment\App.xaml
-3539785276
+51715666331
 
-12448780903
+1554282426
 24653766597
-ConvertingPage.xaml;MainWindow.xaml;SearchPage.xaml;
+Views\ConvertingPage.xaml;Views\Error.xaml;Views\InformationPage.xaml;Views\MainWindow.xaml;Views\SearchPage.xaml;
 
 False
 

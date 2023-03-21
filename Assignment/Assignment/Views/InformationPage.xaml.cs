@@ -10,17 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Assignment
 {
-    public partial class MainWindow : Window
+    public partial class InformationPage : Window
     {
-        public MainWindow()
+        public InformationPage(string color,string id)
         {
             InitializeComponent();
-            DataContext = new VM("#FFA0A0A0");
+            VM vm = new VM(color);
+            vm.LoadInfoPage(id);
+            DataContext = vm;
         }
+
     }
 }

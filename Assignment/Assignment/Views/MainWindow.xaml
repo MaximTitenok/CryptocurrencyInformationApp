@@ -14,7 +14,7 @@
     <Grid>
         <DataGrid x:Name="CoinsGrid" ItemsSource="{Binding CoinsList}" Width="545" 
             Margin="125,50,10,10" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False"
-            CanUserDeleteRows="False" CanUserResizeRows="False">
+            CanUserDeleteRows="False" CanUserResizeRows="False" SelectedIndex="{Binding SelectedField}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Width="100" Binding="{Binding name}"/>
                 <DataGridTextColumn Header="Symbol" Width="50" Binding="{Binding symbol}" />
@@ -25,6 +25,7 @@
 
             </DataGrid.Columns>
         </DataGrid>
+        
         <DataGrid x:Name="TrendsGrid" ItemsSource="{Binding TrendsList}" IsReadOnly="True" Width="110" 
             Margin="10,50,560,10" AutoGenerateColumns="False" CanUserAddRows="False"
             CanUserDeleteRows="False" CanUserResizeRows="False">
@@ -35,9 +36,11 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Convert" HorizontalAlignment="Left" Height="35" 
-                Margin="10,10,0,0" VerticalAlignment="Top" Width="110" Command="{Binding ButtonConvert}"/>
+                Margin="10,10,0,0" VerticalAlignment="Top" Width="96" Command="{Binding ButtonConvert}"/>
         <Button Content="Search" HorizontalAlignment="Left" Height="35" 
             Margin="125,10,0,0" VerticalAlignment="Top" Width="150" Command="{Binding ButtonSearchPage}"/>
+        <Button Content="View information" HorizontalAlignment="Left" Height="35" 
+            Margin="280,10,0,0" VerticalAlignment="Top" Width="150" Command="{Binding ButtonViewInformation}"/>
         <Button Content="Theme" HorizontalAlignment="Left" Height="35" 
             Margin="593,10,0,0" VerticalAlignment="Top" Width="62" Command="{Binding ButtonTheme}"/>
     </Grid>

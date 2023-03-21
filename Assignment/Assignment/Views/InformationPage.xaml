@@ -1,0 +1,59 @@
+﻿<Window x:Class="Assignment.InformationPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Assignment"
+        mc:Ignorable="d"
+        Title="InformationPage" Height="400" Width="911"
+        WindowStartupLocation="CenterScreen" >
+
+    <Window.Background>
+        <SolidColorBrush Color="{Binding YourColorProperty}"/>
+    </Window.Background>
+
+    <Grid>
+
+
+        <Label Content="ID:
+               " HorizontalAlignment="Left" Height="30" Margin="10,10,0,0" VerticalAlignment="Top" Width="122"/>
+        <Label HorizontalAlignment="Left" Height="30" Margin="137,10,0,0" VerticalAlignment="Top" Width="70"
+               Content="{Binding InfoCoinID, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Height="30" Margin="230,10,0,0" VerticalAlignment="Top" Width="70"/>
+        <Label HorizontalAlignment="Left" Height="30" Margin="300,10,0,0" VerticalAlignment="Top" Width="70"
+               Content="{Binding InfoName, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Total volume:" HorizontalAlignment="Left" Height="30" Margin="10,80,0,0" VerticalAlignment="Top" Width="122"/>
+        <Label Content="Symbol:" HorizontalAlignment="Left" Height="30" Margin="347,10,0,0" VerticalAlignment="Top" Width="70"/>
+        <Label HorizontalAlignment="Left" Height="30" Margin="417,10,0,0" VerticalAlignment="Top" Width="70"
+            Content="{Binding InfoSymbol, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Price:" HorizontalAlignment="Left" Height="30" Margin="10,45,0,0" VerticalAlignment="Top" Width="122"/>
+        <Label HorizontalAlignment="Left" Height="30" Margin="137,45,0,0" VerticalAlignment="Top" Width="114"
+            Content="{Binding InfoPrice, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label HorizontalAlignment="Left" Height="30" Margin="137,80,0,0" VerticalAlignment="Top" Width="114"
+            Content="{Binding InfoVolume, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Content="Market capitalization:" HorizontalAlignment="Left" Height="30" Margin="10,115,0,0" VerticalAlignment="Top" Width="122"/>
+        <Label HorizontalAlignment="Left" Height="30" Margin="137,115,0,0" VerticalAlignment="Top" Width="70"
+            Content="{Binding InfoMarkCap, UpdateSourceTrigger=PropertyChanged}"/>
+        <DataGrid x:Name="MarketsGrid" ItemsSource="{Binding MarketsList}" 
+            Margin="671,10,10,10" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False"
+            CanUserDeleteRows="False" CanUserResizeRows="False" Width="230">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Market" Width="100" Binding="{Binding market}"/>
+                <DataGridTextColumn Header="Currency" Width="50" Binding="{Binding currency}" />
+                <DataGridTextColumn Header="Price" Width="50" Binding="{Binding price}" />
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+        <RichTextBox Margin="10,168,401,10">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding InfoDescription, UpdateSourceTrigger=PropertyChanged}" />
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <ListBox HorizontalAlignment="Left" Height="340" Margin="515,0,0,0" VerticalAlignment="Center" Width="151" ItemsSource="{Binding PriceList}"/>
+        <Button Content="Currency's website" HorizontalAlignment="Left" Height="35" 
+            Margin="337,123,0,0" VerticalAlignment="Top" Width="150" Command="{Binding ButtonGoWebsite}"/>
+    </Grid>
+</Window>
